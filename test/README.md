@@ -12,4 +12,4 @@
 In this folder you can put the smart contract test you want to be executed.
 
 The environment is based on [`mocha`](https://mochajs.org) and [`chai`](https://www.chaijs.com),
-with some additional test helpers from [`waffle`](https://getwaffle.io) and [`hardhat`](https://hardhat.org/guides/waffle-testing.html).
+with some additional test helpers from [`waffle`](https://getwaffle.io) and [`hardhat`](https://hardhat.org/guides/waffle-testing.html.
