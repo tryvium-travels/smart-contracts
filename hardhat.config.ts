@@ -1,7 +1,7 @@
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
-import "@eth-optimism/plugins/hardhat/compiler"
+import "@eth-optimism/plugins/hardhat/compiler";
 import "hardhat-gas-reporter";
 import "tsconfig-paths/register";
 
@@ -13,7 +13,7 @@ import networks from "./hardhat.networks";
 
 const config : HardhatUserConfig = {
   solidity: {
-    version: "0.8.7",
+    version: "0.8.10",
     settings: {
       optimizer: {
         enabled: true,
@@ -26,7 +26,7 @@ const config : HardhatUserConfig = {
     coinmarketcap: process.env.COINMARKETCAP_API_KEY,
   },
   ovm: {
-    solcVersion: "0.8.7",
+    solcVersion: "0.8.10",
   },
   networks,
 };
