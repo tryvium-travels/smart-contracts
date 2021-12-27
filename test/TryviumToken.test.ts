@@ -1,19 +1,19 @@
 import { expect, use } from "chai";
 import { ethers, waffle } from "hardhat";
 
-import { TokenVault, BountyVault, TryviumToken } from "@/typechain";
+import { TokenVault, BountyVault, TryviumToken } from "@/typechain-types";
+import { Signer } from "ethers";
 
 const { utils } = ethers;
-const { provider: mock_provider, solidity } = waffle;
+const { solidity } = waffle;
 
 use(solidity);
 
 describe("TryviumToken tests", () => {
     const max_supply = utils.parseEther("1800000000");
-    const [
-        external_wallet,
-        another_external_wallet,
-    ] = mock_provider.getWallets();
+
+    let external_wallet : Signer;
+    let another_external_wallet : Signer;
 
     let team_vault: TokenVault;
     let bounty_vault: BountyVault;
@@ -21,6 +21,10 @@ describe("TryviumToken tests", () => {
     let reserved_funds_vault: TokenVault;
 
     let token: TryviumToken;
+
+    before(async () => {
+        [ external_wallet, another_external_wallet ] = await ethers.getSigners();
+    });
 
     beforeEach(async () => {
         const tryvium_token_factory = await ethers.getContractFactory("TryviumToken");
@@ -57,13 +61,13 @@ describe("TryviumToken tests", () => {
     });
 
     it("Can mint under the max supply", async () => {
-        const tx = await team_vault.transferTokens(token.address, 1000, external_wallet.address, "Testing");
+        const tx = await team_vault.transferTokens(token.address, 1000, await external_wallet.getAddress(), "Testing");
         await tx.wait();
 
         const token_from_external_wallet = token.connect(external_wallet);
         await expect(token_from_external_wallet.burn(1)).not.to.be.reverted;
 
-        await token.mint(external_wallet.address, 1);
+        await token.mint(await external_wallet.getAddress(), 1);
     });
 
     it("Assigns the correct initial balances for all vaults on deploy", async () => {
@@ -74,33 +78,33 @@ describe("TryviumToken tests", () => {
     });
 
     it("Transfer adds amount to destination account", async () => {
-        let tx = await team_vault.transferTokens(token.address, 1000, external_wallet.address, "Testing");
+        let tx = await team_vault.transferTokens(token.address, 1000, await external_wallet.getAddress(), "Testing");
         await tx.wait();
 
         const token_from_external_wallet = token.connect(external_wallet);
 
-        const balance_before_transfer = await token.balanceOf(external_wallet.address);
+        const balance_before_transfer = await token.balanceOf(await external_wallet.getAddress());
         
-        tx = await token_from_external_wallet.transfer(another_external_wallet.address, 10);
+        tx = await token_from_external_wallet.transfer(await another_external_wallet.getAddress(), 10);
         await tx.wait();
 
-        const balance_after_transfer = await token.balanceOf(external_wallet.address);
+        const balance_after_transfer = await token.balanceOf(await external_wallet.getAddress());
 
         expect(balance_after_transfer.add(10)).to.equal(balance_before_transfer);
     });
 
     it("Transfer emits event", async () => {
-        let tx = await team_vault.transferTokens(token.address, 1000, external_wallet.address, "Testing");
+        let tx = await team_vault.transferTokens(token.address, 1000, await external_wallet.getAddress(), "Testing");
         await tx.wait();
         
         const token_from_external_wallet = token.connect(external_wallet);
-        await expect(token_from_external_wallet.transfer(another_external_wallet.address, 7))
+        await expect(token_from_external_wallet.transfer(await another_external_wallet.getAddress(), 7))
             .to.emit(token_from_external_wallet, "Transfer")
-            .withArgs(external_wallet.address, another_external_wallet.address, 7);
+            .withArgs(await external_wallet.getAddress(), await another_external_wallet.getAddress(), 7);
     });
 
     it("Can not transfer above the amount", async () => {
-        let tx = await team_vault.transferTokens(token.address, 1000, external_wallet.address, "Testing");
+        let tx = await team_vault.transferTokens(token.address, 1000, await external_wallet.getAddress(), "Testing");
         await tx.wait();
 
         const token_from_external_wallet = token.connect(external_wallet);
@@ -114,38 +118,38 @@ describe("TryviumToken tests", () => {
     });
 
     it("Should be able to burn own tokens", async () => {
-        let tx = await team_vault.transferTokens(token.address, 1000, external_wallet.address, "Testing");
+        let tx = await team_vault.transferTokens(token.address, 1000, await external_wallet.getAddress(), "Testing");
         await tx.wait();
 
         const token_from_external_wallet = token.connect(external_wallet);
-        const balance_before_burn = await token.balanceOf(external_wallet.address);
+        const balance_before_burn = await token.balanceOf(await external_wallet.getAddress());
         
         tx = await token_from_external_wallet.burn(10);
         await tx.wait();
 
-        const balance_after_burn = await token.balanceOf(external_wallet.address);
+        const balance_after_burn = await token.balanceOf(await external_wallet.getAddress());
 
         expect(balance_after_burn.add(10)).to.equal(balance_before_burn);
     });
 
     it("Should be able to burn tokens from allowance", async () => {
-        let tx = await team_vault.transferTokens(token.address, 1000, another_external_wallet.address, "Testing");
+        let tx = await team_vault.transferTokens(token.address, 1000, await another_external_wallet.getAddress(), "Testing");
         await tx.wait();
 
         const token_from_external_wallet = token.connect(external_wallet);
         const token_from_another_external_wallet = token.connect(another_external_wallet);
         
-        await expect(token_from_external_wallet.burnFrom(another_external_wallet.address, 10), "Should not be able to burn without allowance").to.be.reverted;
+        await expect(token_from_external_wallet.burnFrom(await another_external_wallet.getAddress(), 10), "Should not be able to burn without allowance").to.be.reverted;
 
-        tx = await token_from_another_external_wallet.approve(external_wallet.address, 10);
+        tx = await token_from_another_external_wallet.approve(await external_wallet.getAddress(), 10);
         await tx.wait();
 
-        const balance_before_burn = await token.balanceOf(another_external_wallet.address);
+        const balance_before_burn = await token.balanceOf(await another_external_wallet.getAddress());
 
-        tx = await token_from_external_wallet.burnFrom(another_external_wallet.address, 10);
+        tx = await token_from_external_wallet.burnFrom(await another_external_wallet.getAddress(), 10);
         await tx.wait();
         
-        const balance_after_burn = await token.balanceOf(another_external_wallet.address);
+        const balance_after_burn = await token.balanceOf(await another_external_wallet.getAddress());
 
         expect(balance_after_burn.add(10)).to.equal(balance_before_burn);
     });

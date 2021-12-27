@@ -1,4 +1,3 @@
-import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
@@ -11,6 +10,12 @@ import { HardhatUserConfig } from "hardhat/config";
 import networks from "./hardhat.networks";
 
 const config: HardhatUserConfig = {
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts",
+  },
   solidity: {
     version: "0.8.11",
     settings: {

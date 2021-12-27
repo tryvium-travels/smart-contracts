@@ -1,22 +1,26 @@
 import { expect, use } from "chai";
 import { ethers, waffle } from "hardhat";
 
-import { BountyVault, TestToken } from "@/typechain";
+import { BountyVault, TestToken } from "@/typechain-types";
+import { Signer } from "ethers";
 
 const { utils } = ethers;
-const { provider: mock_provider, solidity } = waffle;
+const { solidity } = waffle;
 
 use(solidity);
 
 describe("token-vaults/BountyVault tests", () => {
     const max_supply = utils.parseEther("1800000000");
-    const [
-        owner_wallet,
-        external_wallet,
-    ] = mock_provider.getWallets();
+    
+    let owner_wallet : Signer;
+    let external_wallet : Signer;
 
     let test_vault: BountyVault;
     let test_token: TestToken;
+
+    before(async () => {
+        [ owner_wallet, external_wallet ] = await ethers.getSigners(); 
+    });
 
     beforeEach(async () => {
         const token_vault_factory = await ethers.getContractFactory("BountyVault", owner_wallet);
@@ -32,7 +36,7 @@ describe("token-vaults/BountyVault tests", () => {
     });
 
     it("Should set owner correctly", async () => {
-        expect(await test_vault.owner()).to.equal(owner_wallet.address, "Should have correct owner");
+        expect(await test_vault.owner()).to.equal(await owner_wallet.getAddress(), "Should have correct owner");
     });
 
     it("Should have balance correctly assigned", async () => {

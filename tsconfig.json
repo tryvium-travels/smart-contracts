@@ -4,7 +4,6 @@
     "./typechain-types/*",
     "./typechain-types/factories/*",
     "./scripts",
-    "./deploy",
     "./test"
   ],
   "exclude": [
