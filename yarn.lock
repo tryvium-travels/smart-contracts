@@ -37,17 +37,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eth-optimism/plugins@npm:^1.0.0-alpha.3":
-  version: 1.0.0-alpha.3
-  resolution: "@eth-optimism/plugins@npm:1.0.0-alpha.3"
-  dependencies:
-    node-fetch: ^2.6.1
-  peerDependencies:
-    hardhat: ^2
-  checksum: 9403f0d8fd60bd6bab232c376efbadd2dcce259117353c731326b98b429d1d9ff6ca134d987af59333a287d7ff1864a49f3055523139e943b81b43930e9bb32b
-  languageName: node
-  linkType: hard
-
 "@ethereum-waffle/chai@npm:^3.4.0":
   version: 3.4.0
   resolution: "@ethereum-waffle/chai@npm:3.4.0"
@@ -9431,7 +9420,6 @@ resolve@1.17.0:
   resolution: "smart-contracts@workspace:."
   dependencies:
     "@atixlabs/hardhat-time-n-mine": ^0.0.5
-    "@eth-optimism/plugins": ^1.0.0-alpha.3
     "@nomiclabs/hardhat-ethers": ^2.0.2
     "@nomiclabs/hardhat-waffle": ^2.0.1
     "@openzeppelin/contracts": ^4.2.0
