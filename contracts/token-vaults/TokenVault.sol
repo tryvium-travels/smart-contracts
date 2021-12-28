@@ -85,7 +85,7 @@ contract TokenVault is ReentrancyGuard, Ownable {
         uint256 _amount,
         address payable _to,
         string calldata _reason
-    ) external onlyOwner {
+    ) external onlyOwner nonReentrant {
         _vaultTransfer(_amount, _to, _reason);
     }
 
