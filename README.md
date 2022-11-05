@@ -1,9 +1,8 @@
-<p align="center">
-  <img src="https://res.cloudinary.com/tryvium/image/upload/v1551645701/company/logo-circle.png" height=250 style="margin-left:30px;margin-right:30px;"/> 
-</p>
+![smart-contracts logo](assets/logo.png)
 
 ![GitHub](https://img.shields.io/github/license/tryvium-travels/smart-contracts-development-template?style=flat-square)
 ![Twitter Follow](https://img.shields.io/twitter/follow/tryviumtravels?style=social)
+
 # Tryvium Smart Contracts Repository
 
 The Tryvium Smart Contracts repository, based on Waffle, Typescript and Hardhat used to create decentralized projects from a solid base.
