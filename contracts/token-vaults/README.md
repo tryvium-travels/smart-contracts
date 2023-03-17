@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://res.cloudinary.com/tryvium/image/upload/v1551645701/company/logo-circle.png" height=250 style="margin-left:30px;margin-right:30px;"/> 
+  <img src="https://i.imgur.com/Fq80eXT.png" height=250 style="margin-left:30px;margin-right:30px;"/> 
 </p>
 
 ![GitHub](https://img.shields.io/github/license/tryvium-travels/smart-contracts-development-template?style=flat-square)
