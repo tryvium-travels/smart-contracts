@@ -8,8 +8,9 @@ import "@atixlabs/hardhat-time-n-mine";
 import { HardhatUserConfig } from "hardhat/config";
 
 import networks from "./hardhat.networks";
+import { EthGasReporterConfig } from "hardhat-gas-reporter/dist/src/types";
 
-const config: HardhatUserConfig = {
+const config: HardhatUserConfig & { gasReporter: EthGasReporterConfig } = {
   paths: {
     sources: "./contracts",
     tests: "./test",
